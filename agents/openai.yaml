@@ -1,0 +1,8 @@
+interface:
+  display_name: "ANSI Preview"
+  short_description: "Render polished braille terminal visuals"
+  brand_color: "#0EA5A4"
+  default_prompt: "Use $ansi-preview to render this as a clean ANSI truecolor preview with braille curves, restrained color, and a short legend."
+
+policy:
+  allow_implicit_invocation: true
