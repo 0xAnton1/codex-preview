@@ -5,13 +5,11 @@
 ![Codex](https://img.shields.io/badge/Codex-compatible-10b981.svg)
 ![Claude](https://img.shields.io/badge/Claude-compatible-2563eb.svg)
 
-![Codex Preview logo](./assets/codex-preview-logo.svg)
+![Codex Preview hero](./assets/codex-preview-hero.svg)
 
 Braille charts. Flow maps. Wireframes. Terminal-first visuals.
 
 > A lightweight Codex and Claude skill pack for clean ANSI truecolor previews: braille charts, flow maps, wireframes, tables, and terminal-first visual thinking.
-
-![Codex Preview hero](./assets/codex-preview-hero.svg)
 
 ## Why I Built It
 
@@ -304,11 +302,6 @@ codex-preview/
 └── README.md
 ```
 
-## What Is Still Missing
-
-- PNG screenshots for richer GitHub previews
-- a short GIF for the README hero section
-- optional Windows-native installer
 
 ## License
 
