@@ -1,5 +1,10 @@
 # ANSI Preview
 
+![Repo](https://img.shields.io/badge/repo-public-16a34a.svg)
+![License](https://img.shields.io/badge/license-MIT-0f766e.svg)
+![Codex](https://img.shields.io/badge/Codex-compatible-10b981.svg)
+![Claude](https://img.shields.io/badge/Claude-compatible-2563eb.svg)
+
 Braille charts. Flow maps. Wireframes. Terminal-first visuals.
 
 > A lightweight Codex skill pack for clean ANSI truecolor previews: braille charts, flow maps, wireframes, tables, and terminal-first visual thinking.
@@ -24,6 +29,45 @@ It is designed to work well for:
 - Claude users via `CLAUDE.md` and `.claude/commands/ansi-preview.md`
 - GitHub readers via screenshots, SVGs, and copy-paste-friendly examples
 
+## Quick Start
+
+### Fast Download
+
+- Public GitHub repo: `https://github.com/0xAnton1/ansi-preview`
+- Latest release: `https://github.com/0xAnton1/ansi-preview/releases/latest`
+- Download ZIP: `https://github.com/0xAnton1/ansi-preview/archive/refs/heads/main.zip`
+- Clone:
+
+```bash
+git clone git@github.com:0xAnton1/ansi-preview.git
+```
+
+### One-Command Install
+
+Codex global install:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/0xAnton1/ansi-preview/main/scripts/install.sh | bash -s -- --target codex
+```
+
+Codex repo-local install:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/0xAnton1/ansi-preview/main/scripts/install.sh | bash -s -- --target codex --codex-dir "$PWD/.codex"
+```
+
+Claude install into the current project:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/0xAnton1/ansi-preview/main/scripts/install.sh | bash -s -- --target claude --project-dir "$PWD"
+```
+
+Install both in one shot:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/0xAnton1/ansi-preview/main/scripts/install.sh | bash -s -- --target both --project-dir "$PWD"
+```
+
 ## Why This Format Works
 
 - fast first-look inspection
@@ -47,6 +91,7 @@ Good install targets:
 
 - repo-local: `.codex/skills/ansi-preview`
 - user-global: `~/.codex/skills/ansi-preview`
+- scripted install: `scripts/install.sh --target codex`
 
 ## Use With Claude
 
@@ -60,6 +105,12 @@ Useful install targets:
 - repo-local `CLAUDE.md`
 - repo-local `.claude/commands/ansi-preview.md`
 - or copy the command text into your own Claude command library
+- scripted install: `scripts/install.sh --target claude --project-dir /path/to/project`
+
+Behavior note:
+
+- the installer will not overwrite an existing project `CLAUDE.md`
+- if one already exists, it writes `.claude/ansi-preview-reference.md` instead
 
 ## Gallery
 
@@ -160,6 +211,27 @@ Legend  ■ primary flow  ■ exploration flow  ■ aggregate outputs  ■ cauti
 
 If color drops out, labels and geometry should still make the preview readable.
 
+## Token Profile
+
+Rough rule:
+
+- ANSI is usually cheaper than HTML, SVG, or long prose for first-look visuals
+- braille is especially efficient for smooth curves
+- repeated truecolor escape sequences are the main token cost multiplier
+
+Approximate output-token ranges:
+
+| Preview type | Mono / low-color | Full truecolor |
+|---|---:|---:|
+| tiny sparkline or strip | 15-40 | 25-70 |
+| smooth braille chart | 70-140 | 110-220 |
+| series + activity stack | 30-80 | 50-120 |
+| compact table or wireframe | 90-220 | 130-320 |
+| parallel system flow | 260-500 | 380-700 |
+
+These are general planning numbers, not exact tokenizer measurements.
+Actual usage depends on terminal width, label length, and how aggressively color is applied.
+
 ## Compatibility
 
 - best experience: truecolor terminal with braille and box-drawing support
@@ -176,6 +248,27 @@ The practical public distribution path is:
 2. keep the core skill files stable
 3. show screenshots or SVG previews in `assets/`
 4. document Codex and Claude install paths clearly
+
+## What's Included
+
+```text
+ansi-preview/
+├── SKILL.md
+├── agents/openai.yaml
+├── references/patterns.md
+├── CLAUDE.md
+├── .claude/commands/ansi-preview.md
+├── scripts/install.sh
+├── assets/ansi-preview-hero.svg
+├── LICENSE
+└── README.md
+```
+
+## What Is Still Missing
+
+- PNG screenshots for richer GitHub previews
+- a short GIF for the README hero section
+- optional Windows-native installer
 
 ## License
 
