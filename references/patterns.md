@@ -10,7 +10,7 @@ Reason: each cell behaves like a compact `2x4` dot canvas, so shape density is h
 
 ## Intent Map
 
-- `graph price`, `show the trend`, `plot the metric`, `make it smooth`, `use the curvy ansi style`: braille raster first; add a volume strip if volume matters.
+- `graph the series`, `show the trend`, `plot the metric`, `make it smooth`, `use the curvy ansi style`: braille raster first; add an activity strip if a second magnitude matters.
 - `show it as ANSI truecolor terminal chart with price and volume`: render that exact stacked price plus volume terminal preview.
 - `show the funnel`, `compare stages`: stage bars with conversion deltas.
 - `preview the dashboard`, `sketch the page`: box-drawing wireframe with panels and labels.
@@ -51,7 +51,7 @@ If color is unavailable:
 ### Braille Line Chart
 
 ```ansi
-Price  0.91 ┤        ⢀⣠⠤⠒⠉⠉⠢⣄
+Metric 0.91 ┤        ⢀⣠⠤⠒⠉⠉⠢⣄
        0.64 ┤    ⢀⡴⠋          ⠘⢦⡀
        0.37 ┤ ⢀⡴⠃              ⠘⣆
        0.10 ┼⠤⠋                  ⠈⠒
@@ -131,11 +131,11 @@ candidate-a  0.57   +0.15    ██████
 candidate-b  0.49   +0.07    █████
 ```
 
-### Price + Volume Stack
+### Series + Activity Stack
 
 ```ansi
-PRICE   ⣀⣠⣤⣶⣾⣷⣶⣤⣀
-VOLUME  ▂▃▅█▇▃▂▆█▅▃▂
+SERIES    ⣀⣠⣤⣶⣾⣷⣶⣤⣀
+ACTIVITY  ▂▃▅█▇▃▂▆█▅▃▂
 ```
 
 ### Funny Cat
