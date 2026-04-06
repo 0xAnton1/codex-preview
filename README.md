@@ -11,6 +11,23 @@ Braille charts. Flow maps. Wireframes. Terminal-first visuals.
 
 ![ANSI Preview hero](./assets/ansi-preview-hero.svg)
 
+## Why I Built It
+
+I originally built this for myself.
+It made me noticeably more productive and took real mental load off long coding sessions.
+When you stare at a black terminal for `10h+`, plain text starts to blur together.
+Adding compact color, structure, and shape made it much easier to stay focused and reason clearly.
+
+This is especially useful for:
+
+- visualizing complex processes step by step
+- showing things an LLM understands but does not explain clearly in plain prose
+- previewing a UI, chart, data slice, or system flow before writing real code
+- getting a fast high-level read when you do not want to open a full frontend or plotting stack
+- turning a dull black-and-white conversation into something easier to review in chat, markdown, and docs
+
+On terminals and chat surfaces that support ANSI truecolor and Unicode well, tools like Codex and Claude can make these previews feel surprisingly alive while staying lightweight and immediate.
+
 ## What This Is
 
 `ansi-preview` is a small public skill pack for turning requests like:
