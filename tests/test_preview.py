@@ -25,6 +25,13 @@ class PreviewTests(unittest.TestCase):
         self.assertIn("▁▂▄▅▇█▇▆▄▃▅▆", rendered)
         self.assertNotIn("⢀⣠", rendered)
 
+    def test_readme_chat_example_matches_demo(self) -> None:
+        readme = (ROOT / "README.md").read_text(encoding="utf-8")
+        marker = "Expected chat fallback:\n\n```text\n"
+        self.assertIn(marker, readme)
+        example = readme.split(marker, 1)[1].split("\n```", 1)[0]
+        self.assertEqual(example, demo.render(False, "chat"))
+
     def test_fit_respects_wide_characters(self) -> None:
         rendered = preview.fit("A界B", 5)
         self.assertEqual(preview.display_width(rendered), 5)
