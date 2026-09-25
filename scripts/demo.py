@@ -49,7 +49,9 @@ def render(enabled: bool, surface: str) -> str:
             row(f" Load        {bar(64)}  64%"),
             row(f" Coverage    {bar(86)}  86%"),
             row(" Throughput  ▁▂▄▅▇█▇▆▄▃▅▆      128/min"),
-            row(" Trend       ⢀⣠⠤⠒⠉⠉⠢⣄    ⣀⡠⠤⠒⠉     rising"),
+            # Keep the boxed dashboard portable: block sparklines have more
+            # consistent cell widths than braille glyphs across fonts.
+            row(" Trend       ▁▂▄▅▇█▇▆▄▃▅▆      rising"),
             rule,
             row(footer, "center"),
             bottom,

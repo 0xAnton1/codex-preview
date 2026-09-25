@@ -19,8 +19,11 @@ import demo
 
 class PreviewTests(unittest.TestCase):
     def test_demo_is_fixed_width(self) -> None:
-        widths = {preview.display_width(line) for line in demo.render(False, "chat").splitlines()}
+        rendered = demo.render(False, "chat")
+        widths = {preview.display_width(line) for line in rendered.splitlines()}
         self.assertEqual(widths, {70})
+        self.assertIn("▁▂▄▅▇█▇▆▄▃▅▆", rendered)
+        self.assertNotIn("⢀⣠", rendered)
 
     def test_fit_respects_wide_characters(self) -> None:
         rendered = preview.fit("A界B", 5)
