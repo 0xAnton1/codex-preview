@@ -5,6 +5,8 @@
 ![Codex](https://img.shields.io/badge/Codex_Desktop-ready-10b981.svg)
 ![Terminal](https://img.shields.io/badge/purpose-terminal_UI-0ea5e9.svg)
 
+Current release: `0.2.0` · [changelog](./CHANGELOG.md)
+
 ![Codex Preview hero](./assets/codex-preview-hero.svg)
 
 A no-dependency terminal renderer and Codex skill for easier visual reasoning.
@@ -223,6 +225,8 @@ codex-preview/
 ├── scripts/install.ps1
 ├── scripts/install.sh
 ├── tests/test_preview.py
+├── VERSION
+├── CHANGELOG.md
 ├── CLAUDE.md
 ├── .claude/commands/codex-preview.md
 └── assets/
