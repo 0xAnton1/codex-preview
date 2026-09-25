@@ -1,84 +1,55 @@
 ---
 name: codex-preview
-description: Render compact ANSI truecolor terminal previews for braille charts, smooth line plots, UI wireframes, flow diagrams, tables, and structured data. Use when the user asks to visualize, graph, chart, sketch, map, preview, or show something in terminal or chat instead of only describing it.
+description: Create compact terminal-first previews with Unicode charts, tables, flows, and UI wireframes. Use when the user asks for a terminal, TUI, ANSI, CLI, braille, or text-mode visualization; do not replace requested HTML, SVG, Mermaid, images, or interactive visualizations.
 ---
 
 # Codex Preview
 
-Turn vague visual asks into compact terminal graphics.
+Turn a visual idea or data summary into a compact terminal preview.
 
-Default here when the user says things like:
-- `visualize it`
-- `graph it`
-- `chart it`
-- `show the flow`
-- `map the pipeline`
-- `sketch the UI`
-- `preview the layout`
-- `render a terminal preview`
+## Choose The Output Surface
 
-Do not default here if the user explicitly asks for HTML, SVG, Mermaid, PNG, React, or another richer surface.
+Decide where the preview will be viewed before adding color:
 
-## Default Behavior
+- **Real terminal, including the Codex Desktop integrated terminal:** use ANSI color when the terminal supports it. Keep the geometry readable without color.
+- **Codex Desktop chat or Markdown:** return a fenced plain-text Unicode preview. Do not print raw escape sequences; chat renderers may show them literally or strip them.
+- **Unknown or redirected output:** default to monochrome Unicode.
 
-- Prefer one clean ANSI preview first, then a short read of what it shows.
-- Use `xterm` 24-bit truecolor ANSI plus Unicode blocks, braille, and box-drawing.
-- Keep width compact, usually `60-100` columns unless the user asks otherwise.
-- Use color semantically, not decoratively.
-- Label only what the viewer needs to orient quickly.
+Explicit user format choices win. Do not use this skill when the user asks for HTML, SVG, Mermaid, PNG, React, or another richer surface.
 
-## Chart Modes
+## Workflow
 
-- `braille raster`: default for dense or smooth-looking curves. It packs a `2x4` dot grid into each terminal cell, so lines look less jagged and information density stays high.
-- `block sparkline`: best for tiny summaries, inline previews, and trend strips.
-- `half-block / quadrant`: good middle ground when braille would feel too fine or noisy.
-- `box-drawing scaffold`: use for axes, flow structure, wireframes, and panel boundaries.
+1. Identify the question the preview must answer and the available data. Never invent missing values.
+2. For numeric, tabular, state-lane, or sequential data, read [references/renderer.md](references/renderer.md) and use `scripts/preview.py` for deterministic layout when local Python is available.
+3. For conceptual output, or when the renderer does not fit, choose the smallest useful form:
+   - trend or dense series: braille line or sparkline;
+   - ranking or comparison: aligned table with microbars;
+   - process or decision logic: box-drawing flow;
+   - page or dashboard: labeled wireframe;
+   - state over time: lanes, bands, or a compact matrix.
+4. Bucket or sample long series before drawing. Preserve endpoints, extrema, gaps, and important transitions.
+5. Render one primary preview, normally 60-100 columns, followed by at most a short interpretation.
+6. Check alignment, labels, legend meaning, and monochrome readability.
 
-## Pick The Right Visual Form
+## Rendering Rules
 
-- Time series, price, volume, or metrics over time: use braille raster or a compact line chart first; add a stacked or dual-strip volume preview when volume matters.
-- Rankings, comparisons, diagnostics, or PnL breakdowns: aligned tables with microbars or heat strips.
-- Flows, pipelines, and decision logic: box-drawing flow chart or step map.
-- UI, dashboard, or layout ideas: wireframe with panel boundaries, proportions, and labels.
-- Regimes, states, availability, or coverage windows: lane chart, status bands, or compact matrix.
-- Trees and hierarchies: connector tree rather than a fake flow chart.
-
-## Color Modes
-
-- `semantic`: use directional color such as green/up, red/down, yellow/warn.
-- `accent`: one restrained hue plus neutrals for calm UI and layout previews.
-- `categorical`: small distinct palette for a few series or lanes.
-- `heatmap`: ordered gradient for intensity, density, or score surfaces.
-- `mono`: no color dependency; use when portability matters more than emphasis.
-
-Default to `semantic` for financial charts, `accent` for UI previews, and `mono` if terminal support looks uncertain.
-
-## Render Rules
-
-- Aggregate, bucket, or sample before drawing. Do not dump raw long arrays.
-- Prefer one strong preview over many weak ones.
-- For price and volume, prefer braille price plus dual-strip or stacked output.
-- For binary states or regimes, prefer bands or lanes over misleading line plots.
-- If the user wants a smoother or curvier chart, prefer braille raster before trying wider geometry.
-- If terminal capability is unknown, still render ANSI, but keep geometry simple and avoid giant escape-heavy art.
-- If the user explicitly asks for richer-than-Unicode terminal graphics, switch to Sixel/Kitty output.
-- Honor this phrase verbatim when given: `show it as ANSI truecolor terminal chart with price and volume`.
-
-## Publication Style
-
-- Write it so it can be pasted into chat, docs, issues, or a README without repo-specific jargon.
-- Keep legends short and deterministic.
-- Use stable labels and a small palette so screenshots stay readable.
-- Prefer clarity over ornament. The preview should still read cleanly if color is stripped.
+- Use Unicode braille for dense curves, blocks for small summaries, and box drawing for structure.
+- Use color semantically and sparingly: green/up, red/down, amber/warning, blue/info, gray/context.
+- Keep each colored run long enough to matter; avoid per-character truecolor changes.
+- Build and pad the uncolored text first, then apply ANSI to complete spans so escape codes cannot break alignment.
+- Use fixed logical widths for bars and columns. Prefer ordinary spaces for padding; avoid invisible braille blanks.
+- Label axes or units when their absence could mislead.
+- Mark sampled, normalized, estimated, or unavailable data explicitly.
+- Avoid giant frames, decorative gradients, duplicated views, and long prose that repeats the graphic.
+- Do not claim Sixel or Kitty support unless the active terminal and an available renderer actually support it.
 
 ## Token Discipline
 
-- ANSI previews are usually more token-efficient than HTML, SVG, or long prose for first-look inspection.
-- Braille plots are especially efficient for dense curves because they carry more shape detail per cell.
-- Truecolor escape sequences still cost tokens, so keep palettes small and geometry compact.
-- Prefer sparklines, microbars, bins, and abbreviated labels when speed matters.
-- Avoid repeating the same frame with minor changes.
+- Prefer a short mono or low-color preview for first-pass inspection.
+- Braille increases spatial density, but ANSI escape sequences add tokens; “ANSI” is not automatically cheaper.
+- Reuse a small palette, color spans rather than characters, abbreviate labels, and omit redundant borders.
+- Treat token efficiency as workload-dependent. Compare actual outputs with the target model tokenizer when cost matters.
 
-## Load More Patterns Only When Needed
+## Optional Patterns
 
-If the request needs a richer pattern library, read [references/patterns.md](references/patterns.md).
+Read [references/patterns.md](references/patterns.md) only when the best visual form is unclear or the request needs a richer layout pattern.

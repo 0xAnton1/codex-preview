@@ -2,306 +2,265 @@
 
 ![Repo](https://img.shields.io/badge/repo-public-16a34a.svg)
 ![License](https://img.shields.io/badge/license-MIT-0f766e.svg)
-![Codex](https://img.shields.io/badge/Codex-compatible-10b981.svg)
-![Claude](https://img.shields.io/badge/Claude-compatible-2563eb.svg)
+![Codex](https://img.shields.io/badge/Codex_Desktop-ready-10b981.svg)
+![Terminal](https://img.shields.io/badge/purpose-terminal_UI-0ea5e9.svg)
 
 ![Codex Preview hero](./assets/codex-preview-hero.svg)
 
-Braille charts. Flow maps. Wireframes. Terminal-first visuals.
+A no-dependency terminal renderer and Codex skill for easier visual reasoning.
 
-> A lightweight Codex and Claude skill pack for clean ANSI truecolor previews: braille charts, flow maps, wireframes, tables, and terminal-first visual thinking.
+Turn numeric series, JSON/CSV records, service states, pipelines, and UI ideas into compact braille charts, comparison bars, width-aware tables, state lanes, flows, and wireframes.
 
-## Why I Built It
+It is built for Codex Desktop's [integrated terminal](https://learn.chatgpt.com/docs/integrated-terminal), with a copy-safe Unicode fallback for chat, Markdown, issues, and pull requests. Structured data is rendered deterministically, so the same input keeps the same geometry.
 
-I originally built this for myself.
-It made me noticeably more productive and took real mental load off long coding sessions.
-When you stare at a black terminal for `10h+`, plain text starts to blur together.
-Adding compact color, structure, and shape made it much easier to stay focused and reason clearly.
+## Why Use It?
 
-This is especially useful for:
+Visualization should make a decision easier, not become another project.
 
-- visualizing complex processes step by step
-- showing things an LLM understands but does not explain clearly in plain prose
-- previewing a UI, chart, data slice, or system flow before writing real code
-- getting a fast high-level read when you do not want to open a full frontend or plotting stack
-- turning a dull black-and-white conversation into something easier to review in chat, markdown, and docs
+- **See the shape quickly:** spot trends, gaps, outliers, and state changes without opening a notebook, browser, or plotting stack.
+- **Compare consistently:** render alternatives with the same width, labels, bars, and axes so differences are easy to scan.
+- **Think before building:** sketch a dashboard, pipeline, or service flow in the terminal before writing frontend code.
+- **Keep the result portable:** use color in the terminal and clean Unicode in Codex chat, documentation, issues, and reviews.
+- **Reduce alignment work:** JSON and CSV inputs go through the deterministic renderer instead of being hand-padded by the model.
 
-On terminals and chat surfaces that support ANSI truecolor and Unicode well, tools like Codex and Claude can make these previews feel surprisingly alive while staying lightweight and immediate.
+## What It Does
 
-## What This Is
+- numeric series as deterministic braille charts with explicit gaps
+- positive and negative comparisons as zero-aligned bars
+- JSON and CSV records as width-aware tables
+- categorical history as sampled state lanes
+- sequential systems as wrapping box-drawing flows
+- page and dashboard ideas as terminal wireframes
 
-`codex-preview` is a small public skill pack for turning requests like:
+Structured inputs use the dependency-free `scripts/preview.py` renderer, so scaling, gaps, widths, truncation, and alignment are reproducible. Codex still composes conceptual wireframes when there is no structured input. The separate demo script verifies terminal color and Unicode support locally.
 
-- `visualize it`
-- `graph it`
-- `show the flow`
-- `preview the layout`
-- `show it as ANSI truecolor terminal chart with price and volume`
+## Codex Desktop: Where It Works
 
-into compact, readable terminal visuals.
+| Surface | Result | Recommended output |
+|---|---|---|
+| Integrated terminal | Best experience | ANSI truecolor + Unicode |
+| Codex chat | Good structural preview | fenced monochrome Unicode |
+| Markdown, issues, PRs | Portable | monochrome Unicode or screenshots |
+| Limited fonts / terminals | Reduced fidelity | ASCII or block fallback |
 
-It is designed to work well for:
-
-- Codex users via `SKILL.md`
-- Claude users via `CLAUDE.md` and `.claude/commands/codex-preview.md`
-- GitHub readers via screenshots, SVGs, and copy-paste-friendly examples
+Raw ANSI escape sequences are not intended for the Codex chat renderer. In chat, the geometry still works; open the integrated terminal when you want live color. This distinction is deliberate and keeps copied output readable.
 
 ## Quick Start
 
-### Fast Download
+### Windows / Codex Desktop
 
-- Public GitHub repo: `https://github.com/0xAnton1/codex-preview`
-- Latest release: `https://github.com/0xAnton1/codex-preview/releases/latest`
-- Download ZIP: `https://github.com/0xAnton1/codex-preview/archive/refs/heads/main.zip`
-- Clone:
+From PowerShell:
 
-```bash
-git clone git@github.com:0xAnton1/codex-preview.git
+```powershell
+irm https://raw.githubusercontent.com/0xAnton1/codex-preview/main/scripts/install.ps1 | iex
 ```
 
-### One-Command Install
+Or from a cloned checkout:
 
-Codex global install:
+```powershell
+.\scripts\install.ps1 -Target codex
+```
+
+The default destination is `$CODEX_HOME\skills\codex-preview`, or `$HOME\.codex\skills\codex-preview` when `CODEX_HOME` is unset.
+
+### macOS / Linux
 
 ```bash
 curl -fsSL https://raw.githubusercontent.com/0xAnton1/codex-preview/main/scripts/install.sh | bash -s -- --target codex
 ```
 
-Codex repo-local install:
+### Repo-local install
+
+Install the skill only for the current repository:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/0xAnton1/codex-preview/main/scripts/install.sh | bash -s -- --target codex --codex-dir "$PWD/.codex"
+./scripts/install.sh --target codex --codex-dir "$PWD/.codex"
 ```
 
-Claude install into the current project:
+On Windows:
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/0xAnton1/codex-preview/main/scripts/install.sh | bash -s -- --target claude --project-dir "$PWD"
+```powershell
+.\scripts\install.ps1 -Target codex -CodexDir (Join-Path $PWD '.codex')
 ```
 
-Install both in one shot:
+Start a new Codex task after installation so the skill is discovered.
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/0xAnton1/codex-preview/main/scripts/install.sh | bash -s -- --target both --project-dir "$PWD"
+## Try It In 30 Seconds
+
+From a cloned checkout, run the chat-safe demo:
+
+```powershell
+python .\scripts\demo.py --surface chat
 ```
 
-## Why This Format Works
-
-- fast first-look inspection
-- often cheaper than HTML, SVG, or long prose for early thinking
-- braille charts carry more curve detail per cell
-- easy to paste into chats, issues, docs, and PRs
-- strong bridge between plain text and richer UI work
-
-## Use With Codex
-
-Copy this repo's portable core into a skill directory:
+Then ask Codex:
 
 ```text
-.codex/skills/codex-preview/
-├── SKILL.md
-├── agents/openai.yaml
-└── references/patterns.md
+Use $codex-preview to visualize these test timings as a compact braille chart.
 ```
 
-Good install targets:
+For a real terminal preview, use:
 
-- repo-local: `.codex/skills/codex-preview`
-- user-global: `~/.codex/skills/codex-preview`
-- scripted install: `scripts/install.sh --target codex`
-
-## Use With Claude
-
-This repo also includes:
-
-- `CLAUDE.md` for project-level guidance
-- `.claude/commands/codex-preview.md` for a reusable slash command prompt
-
-Useful install targets:
-
-- repo-local `CLAUDE.md`
-- repo-local `.claude/commands/codex-preview.md`
-- or copy the command text into your own Claude command library
-- scripted install: `scripts/install.sh --target claude --project-dir /path/to/project`
-
-Behavior note:
-
-- the installer will not overwrite an existing project `CLAUDE.md`
-- if one already exists, it writes `.claude/codex-preview-reference.md` instead
-
-## Gallery
-
-### Smooth Braille Chart
-
-![Smooth braille chart](./assets/codex-preview-chart-card.svg)
-
-<details>
-<summary>ANSI source</summary>
-
-```ansi
-Metric 0.91 ┤               ⢀⣠⠴⠒⠉⠉⠓⢦⣀
-       0.64 ┤          ⢀⡴⠋              ⠙⢦⡀
-       0.37 ┤      ⢀⡴⠋                    ⠘⣆
-       0.18 ┤  ⢀⡴⠃                        ⠘⣆
-       0.05 ┼⠤⠋                            ⠈⠒
-              step-1     step-2     step-3     step-4
+```text
+Use $codex-preview in the integrated terminal to compare these API latencies with zero-aligned bars.
 ```
 
-</details>
+## Use It In Codex
 
-### Series + Activity
+Invoke the skill directly:
 
-![Series and activity preview](./assets/codex-preview-stack-card.svg)
-
-<details>
-<summary>ANSI source</summary>
-
-```ansi
-SERIES    ⢀⣠⠴⠒⠋⠉⠉⠓⢦⣀      level 0.64
-ACTIVITY  ▂▃▅█▇▅▃▂▆█▆▄▂      load 1.8x
+```text
+Use $codex-preview to sketch a terminal dashboard for build health,
+test coverage, deploy status, and recent latency.
 ```
 
-</details>
+Other useful prompts:
 
-### Parallel System Flow
-
-![Parallel system flow](./assets/codex-preview-flow-card.svg)
-
-<details>
-<summary>ANSI source</summary>
-
-```ansi
-Legend  ■ primary flow  ■ exploration flow  ■ aggregate outputs  ■ caution
-
-                        CURRENT SYSTEM OVERVIEW
-
-         PRIMARY PATH                                  EXPLORATION PATH
-┌───────────────────────────────┐              ┌──────────────────────────────────────────┐
-│ input bundle / live event     │              │ input bundle                             │
-│ states, scores, tags, timing  │              │ states, scores, history, windows         │
-└──────────────┬────────────────┘              └───────────────────┬──────────────────────┘
-               │                                                   │
-               ▼                                                   ▼
-┌───────────────────────────────┐              ┌──────────────────────────────────────────┐
-│ decision engine               │              │ summarize_state_trajectory()             │
-│ pick leader                   │              │                                          │
-│ score confidence / entry      │              │ per step computes:                       │
-└──────────────┬────────────────┘              │ • center / spread                        │
-               │                               │ • confidence gap                         │
-               ▼                               │ • nearby support                         │
-┌───────────────────────────────┐              │ • protected zone around center           │
-│ routing layer                 │              └───────────────────┬──────────────────────┘
-│ hold / refresh rules          │                                  │
-│ exit if leader changes        │                                  ▼
-└──────────────┬────────────────┘              ┌──────────────────────────────────────────┐
-               │                               │ expand each step into candidate rows      │
-               ▼                               │ row = moment × target                     │
-┌───────────────────────────────┐              │                                          │
-│ execution loop                │              │ per row stores:                          │
-│ sort by entry score           │              │ • rank / priority                        │
-│ final score = confidence      │              │ • role = center / nearby /               │
-└──────────────┬────────────────┘              │   protected / outside                    │
-               │                               │ • locked gain / locked risk              │
-               ▼                               │ • change_1 / drift_1                     │
-┌───────────────────────────────┐              └───────────────────┬──────────────────────┘
-│ aggregate outputs             │                                  │
-│ reports / alerts / logs       │                                  ▼
-└───────────────────────────────┘              ┌──────────────────────────────────────────┐
-                                               │ review tables / summary views            │
-                                               │ compare patterns and refine rules        │
-                                               └──────────────────────────────────────────┘
+```text
+Use $codex-preview to show these values as a compact braille trend.
+Use $codex-preview to map this pipeline as a terminal flow.
+Use $codex-preview to compare these options in a TUI table.
+Use $codex-preview to sketch this page as a terminal wireframe.
 ```
 
-</details>
+For a colored result, ask Codex to render or run the preview in the integrated terminal. For a response you want to copy into Markdown, ask for monochrome Unicode.
 
-### Funny ANSI Cat
+## Use The Renderer Directly
 
-```ansi
- /\_/\\
-( o.o )
- > ^ <
+The renderer requires only Python 3. Global display options come before the rendering mode.
+
+```powershell
+# Braille chart with a missing-value gap
+python .\scripts\preview.py --surface chat --width 70 line `
+  --title "Latency" --values "10,12,11,18,14,,20,24,21"
+
+# Mixed-sign comparison around a shared zero axis
+python .\scripts\preview.py --surface chat bars `
+  --title "P&L" --items "Alpha=42,Beta=-17,Gamma=28"
+
+# Width-aware CSV table
+python .\scripts\preview.py --width 80 table `
+  --input results.csv --columns "name,score,status" --limit 15
+
+# Categorical state history
+python .\scripts\preview.py lanes `
+  --items "API=ok,ok,warn,ok;DB=ok,warn,fail,ok"
+
+# Wrapping sequential flow
+python .\scripts\preview.py --width 60 flow `
+  --steps "Ingest,Validate,Transform,Score,Publish"
 ```
 
-## Prompt Examples
+JSON and CSV schemas, state names, and additional examples are documented in [`references/renderer.md`](./references/renderer.md).
 
-- `Use $codex-preview to show this as a smooth braille chart.`
-- `Use $codex-preview to show it as ANSI truecolor terminal chart with price and volume.`
-- `Use $codex-preview to sketch this UI in terminal first.`
-- `Use $codex-preview to map this flow with several boxes and a legend.`
-- `Use $codex-preview to compare these variants in one compact table.`
+## Verify Your Terminal
 
-## Visual Language
+Run the bundled demo:
 
-### Chart Modes
+```powershell
+python .\scripts\demo.py --surface auto --color auto
+```
 
-- `braille raster`: dense or smooth series
-- `block sparkline`: tiny summaries
-- `half-block / quadrant`: simplified shape with more weight
-- `box-drawing scaffold`: wireframes, flows, structural diagrams
+Force either surface when testing:
 
-### Legend Convention
+```powershell
+python .\scripts\demo.py --surface terminal --color always
+python .\scripts\demo.py --surface chat
+```
 
-- `primary flow`: green or main accent
-- `exploration flow`: cyan
-- `aggregate outputs`: blue
-- `caution`: amber
-- `neutral context`: gray
+`--surface chat` always suppresses ANSI escapes, even if color is requested. It produces the same portable form used in Codex chat and Markdown.
 
-If color drops out, labels and geometry should still make the preview readable.
+Expected chat fallback:
 
-## Token Profile
+```text
+┌────────────────────────────────────────────────────────────────────┐
+│                    CODEX PREVIEW · TERMINAL UI                     │
+│ Surface  chat         Mode  portable     Layout  fixed-width       │
+├──────────────────────┼──────────────────────┼──────────────────────┤
+│        SYSTEM        │       RENDERER       │        CHECKS        │
+│      ● HEALTHY       │       ● ACTIVE       │     ▲ 1 WARNING      │
+├────────────────────────────────────────────────────────────────────┤
+│ Load        █████████████░░░░░░░  64%                              │
+│ Coverage    █████████████████░░░  86%                              │
+│ Throughput  ▁▂▄▅▇█▇▆▄▃▅▆      128/min                              │
+│ Trend       ⢀⣠⠤⠒⠉⠉⠢⣄    ⣀⡠⠤⠒⠉     rising                           │
+├────────────────────────────────────────────────────────────────────┤
+│  surface: chat  ·  renderer: Unicode / no ANSI  ·  width: 70 cols  │
+└────────────────────────────────────────────────────────────────────┘
+```
 
-Rough rule:
+## Is It Token-Efficient?
 
-- ANSI is usually cheaper than HTML, SVG, or long prose for first-look visuals
-- braille is especially efficient for smooth curves
-- repeated truecolor escape sequences are the main token cost multiplier
+Sometimes—and now the skill says so precisely.
 
-Approximate output-token ranges:
+Braille is spatially efficient: one terminal cell represents a `2 × 4` dot grid, so a curve can carry more shape than a block-only chart of the same width. A compact chart or table can also replace a long verbal description.
 
-| Preview type | Mono / low-color | Full truecolor |
-|---|---:|---:|
-| tiny sparkline or strip | 15-40 | 25-70 |
-| smooth braille chart | 70-140 | 110-220 |
-| series + activity stack | 30-80 | 50-120 |
-| compact table or wireframe | 90-220 | 130-320 |
-| parallel system flow | 260-500 | 380-700 |
+ANSI is not automatically token-efficient. Every color escape sequence adds bytes and usually adds tokens. The efficient default is therefore:
 
-These are general planning numbers, not exact tokenizer measurements.
-Actual usage depends on terminal width, label length, and how aggressively color is applied.
+1. one small preview;
+2. monochrome or a few long color spans;
+3. sampled data and abbreviated labels;
+4. no repeated frame or prose duplication.
 
-## Compatibility
+Do not rely on universal token ranges: token counts vary by model tokenizer, text, geometry, and color density. Measure the actual prompt and output with the tokenizer used by your target model when cost matters. The skill entrypoint is intentionally short, while the larger pattern library is loaded only when needed.
 
-- best experience: truecolor terminal with braille and box-drawing support
-- good fallback: 256-color terminal
-- safe fallback: monochrome Unicode
-- richer-than-Unicode terminal ask: Sixel or Kitty
+The deterministic renderer primarily improves reliability and avoids repeated model attempts to hand-align output. It does not make the rendered characters free: output returned to chat still counts like other text.
 
-## Publishing Notes
+## How The Skill Works
 
-There is no special packaging step required for this repo to be useful.
-The practical public distribution path is:
+Codex discovers the skill from its `SKILL.md` metadata. When a request clearly asks for a terminal/TUI visualization—or when you invoke `$codex-preview`—Codex loads the instructions and chooses a visual form. Structured data is routed through `scripts/preview.py`; detailed command schemas live in `references/renderer.md`; freeform templates remain in `references/patterns.md` for conceptual layouts.
 
-1. publish the repo on GitHub
-2. keep the core skill files stable
-3. show screenshots or SVG previews in `assets/`
-4. document Codex and Claude install paths clearly
-
-## What's Included
+This follows OpenAI's recommended skill structure: a focused `SKILL.md`, optional references for progressive disclosure, scripts for deterministic work, and UI metadata in `agents/openai.yaml`. See [OpenAI's skill documentation](https://developers.openai.com/plugins/build/skills).
 
 ```text
 codex-preview/
 ├── SKILL.md
 ├── agents/openai.yaml
 ├── references/patterns.md
+├── references/renderer.md
+├── scripts/demo.py
+├── scripts/preview.py
+├── scripts/install.ps1
+├── scripts/install.sh
+├── tests/test_preview.py
 ├── CLAUDE.md
 ├── .claude/commands/codex-preview.md
-├── scripts/install.sh
-├── assets/codex-preview-hero.svg
-├── LICENSE
-└── README.md
+└── assets/
 ```
 
+## Design Boundaries
+
+- Terminal-first does not mean terminal-only. Chat receives a portable Unicode fallback.
+- The preview should expose structure, not pretend missing data exists.
+- Explicit HTML, SVG, Mermaid, image, or interactive requests keep their requested format.
+- Sixel and Kitty graphics require actual terminal and renderer support; the skill does not assume either.
+- Color must reinforce labels and geometry, never become the only carrier of meaning.
+
+## Tests
+
+Run the dependency-free suite:
+
+```powershell
+python -B -m unittest discover -s tests -v
+```
+
+The suite checks Unicode display width, missing-value gaps, mixed-sign axes, table truncation, state sampling, flow wrapping, JSON/CSV loading, and chat suppression of ANSI escapes.
+
+## Claude Compatibility
+
+Claude support remains available through `CLAUDE.md` and `.claude/commands/codex-preview.md`:
+
+```bash
+./scripts/install.sh --target claude --project-dir "$PWD"
+```
+
+Or on Windows:
+
+```powershell
+.\scripts\install.ps1 -Target claude -ProjectDir $PWD
+```
+
+The installer preserves an existing `CLAUDE.md` and writes the extra guidance to `.claude/codex-preview-reference.md`.
 
 ## License
 

@@ -1,8 +1,8 @@
 interface:
   display_name: "Codex Preview"
-  short_description: "Render polished braille terminal visuals"
+  short_description: "Preview charts and interfaces in the terminal"
   brand_color: "#0EA5A4"
-  default_prompt: "Use $codex-preview to render this as a clean ANSI truecolor preview with braille curves, restrained color, and a short legend."
+  default_prompt: "Use $codex-preview to turn this into a compact terminal-first preview that remains readable without color."
 
 policy:
   allow_implicit_invocation: true

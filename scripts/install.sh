@@ -47,11 +47,14 @@ fetch() {
 
 install_codex() {
   local dest="${CODEX_DIR%/}/skills/codex-preview"
-  mkdir -p "${dest}/agents" "${dest}/references"
+  mkdir -p "${dest}/agents" "${dest}/references" "${dest}/scripts"
 
   fetch "SKILL.md" "${dest}/SKILL.md"
   fetch "agents/openai.yaml" "${dest}/agents/openai.yaml"
   fetch "references/patterns.md" "${dest}/references/patterns.md"
+  fetch "references/renderer.md" "${dest}/references/renderer.md"
+  fetch "scripts/demo.py" "${dest}/scripts/demo.py"
+  fetch "scripts/preview.py" "${dest}/scripts/preview.py"
 
   echo "Installed Codex skill to ${dest}"
 }

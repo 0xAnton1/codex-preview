@@ -1,10 +1,11 @@
 # Codex Preview For Claude
 
-When the user asks to visualize, graph, chart, sketch, map, preview, or show something in terminal or chat, prefer a compact ANSI preview first unless they explicitly ask for HTML, SVG, Mermaid, PNG, React, or another richer surface.
+When the user asks for a terminal, TUI, ANSI, CLI, braille, or text-mode visualization, prefer a compact terminal preview unless they explicitly ask for HTML, SVG, Mermaid, PNG, React, or another richer surface.
 
 Core rules:
 
-- use `xterm` 24-bit truecolor ANSI plus Unicode blocks, braille, and box-drawing
+- use ANSI color only in a real terminal that supports it
+- use fenced monochrome Unicode in chat or Markdown; do not print raw escape sequences there
 - prefer `braille raster` for dense or smooth curves
 - prefer stacked or dual-strip output for price plus volume
 - use box-drawing for flows, wireframes, and structural maps
@@ -22,9 +23,9 @@ Legend convention:
 
 Fallbacks:
 
-- if color support is weak, keep the same labels and geometry but drop to mono
+- if color support is weak or unknown, keep the same labels and geometry but drop to mono
 - if braille is too noisy, fall back to blocks or half-blocks
-- if the user wants richer-than-Unicode terminal graphics, switch to Sixel or Kitty
+- use Sixel or Kitty only when the active terminal and an available renderer support it
 
 Honor this phrase verbatim when given:
 
